@@ -28,7 +28,19 @@ No installation required! Just download the files and open `index.html` in your 
 - `index.html` - Main application interface
 - `styles.css` - Modern, responsive styling
 - `script.js` - Application logic and OpenAI API integration
+- `logo.svg` - Vector logo for the application
+- `generate-logos.html` - Helper tool to generate PNG favicons and social media images
+- `site.webmanifest` - PWA manifest file
 - `README.md` - This file
+
+### Logo Generation:
+To generate the required PNG files for favicons and social media sharing:
+1. Open `generate-logos.html` in your browser
+2. Click the download buttons to generate:
+   - `favicon-16x16.png` - Small favicon
+   - `favicon-32x32.png` - Standard favicon
+   - `apple-touch-icon.png` - iOS home screen icon
+   - `logo.png` - Social media sharing image (1200x630)
 
 ## API Key Security
 
