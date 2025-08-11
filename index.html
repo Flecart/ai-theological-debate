@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atheist-Theist Debate</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI Debate Arena</h1>
+            <p>Witness an AI-powered debate between Christian and Atheist perspectives</p>
+        </header>
+
+        <!-- Setup Section -->
+        <section id="setup-section" class="setup-section">
+            <div class="setup-card">
+                <h2>🔑 Setup</h2>
+                <div class="input-group">
+                    <label for="api-key">OpenAI API Key</label>
+                    <input type="password" id="api-key" placeholder="sk-..." required>
+                    <small>Your API key stays in your browser and is never sent to our servers</small>
+                </div>
+                
+                <div class="input-group">
+                    <label for="model-select">AI Model</label>
+                    <select id="model-select">
+                        <option value="gpt-5">GPT-5 (Recommended)</option>
+                        <option value="gpt-5-mini">GPT-5 Mini</option>
+                        <option value="gpt-5-nano">GPT-5 Nano</option>
+                        <option value="gpt-4o">GPT-4o</option>
+                        <option value="gpt-4o-mini">GPT-4o Mini</option>
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="debate-question">Debate Question</label>
+                    <textarea id="debate-question" placeholder="Enter your debate question here..." rows="3" required></textarea>
+                </div>
+
+                <button id="start-debate" class="btn btn-primary">🚀 Start Debate</button>
+            </div>
+        </section>
+
+        <!-- Debate Section -->
+        <section id="debate-section" class="debate-section hidden">
+            <div class="debate-header">
+                <h2>🎭 Live Debate</h2>
+                <div class="debate-controls">
+                    <button id="continue-debate" class="btn btn-secondary">⏭️ Continue</button>
+                    <button id="stop-debate" class="btn btn-danger">⏹️ Stop</button>
+                    <button id="export-debate" class="btn btn-outline">📄 Export</button>
+                    <button id="new-debate" class="btn btn-outline">🔄 New Debate</button>
+                </div>
+            </div>
+
+            <div class="debate-status">
+                <div id="status-message" class="status-message"></div>
+                <div id="loading-spinner" class="loading-spinner hidden"></div>
+            </div>
+
+            <div id="debate-transcript" class="debate-transcript">
+                <!-- Debate messages will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Error Modal -->
+        <div id="error-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3>⚠️ Error</h3>
+                <p id="error-message"></p>
+                <button class="btn btn-primary" onclick="closeErrorModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
