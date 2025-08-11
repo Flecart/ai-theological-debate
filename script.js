@@ -246,15 +246,9 @@ async function runDebateRound() {
 
         // Generate Christian response
         const christianResponse = await generateResponse('Christian', christianSystemPrompt);
-        if (christianResponse) {
-            addMessage('Christian', christianResponse);
-        }
-
+        
         // Generate Atheist response
         const atheistResponse = await generateResponse('Atheist', atheisticSystemPrompt);
-        if (atheistResponse) {
-            addMessage('Atheist', atheistResponse);
-        }
 
         updateStatus(`Round ${debateState.currentRound} complete. Click "Continue" for the next round.`);
         showLoading(false);
