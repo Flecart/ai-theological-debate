@@ -12,7 +12,7 @@ A modern, mobile-friendly web application that facilitates AI-powered debates be
 - **Multiple AI models**: Choose from GPT-5, GPT-5 Mini, GPT-5 Nano, GPT-4o, GPT-4o Mini, or GPT-3.5 Turbo
 
 ## How to Use
-1. **Open the application**: Simply open `index.html` in your web browser, or go to the associated website: flecart.github.io/ai-theological-debate/
+1. **Open the application**: Simply open `index.html` in your web browser, or go to the associated [website](https://flecart.github.io/ai-theological-debate/)
 2. **Enter your OpenAI API key**: Get one from [OpenAI's platform](https://platform.openai.com/api-keys)
 3. **Select an AI model**: Choose your preferred model (GPT-5 recommended)
 4. **Enter a debate question**: Ask anything you'd like the AI personas to debate
