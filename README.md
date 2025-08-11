@@ -1,3 +1,5 @@
+![image](https://github.com/Flecart/ai-theological-debate/blob/main/logo.png)
+
 # 🤖 AI Debate Arena
 
 A modern, mobile-friendly web application that facilitates AI-powered debates between Christian and Atheist perspectives using OpenAI's GPT models.
