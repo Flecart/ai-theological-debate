@@ -118,6 +118,7 @@ const elements = {
     setupSection: document.getElementById('setup-section'),
     debateSection: document.getElementById('debate-section'),
     apiKeyInput: document.getElementById('api-key'),
+    apiEndpointInput: document.getElementById('api-endpoint'),
     modelSelect: document.getElementById('model-select'),
     questionInput: document.getElementById('debate-question'),
     startButton: document.getElementById('start-debate'),
@@ -140,16 +141,21 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.exportButton.addEventListener('click', exportDebate);
     elements.newButton.addEventListener('click', newDebate);
     
-    // Load saved API key if available
+    // Load saved API key and endpoint if available
     const savedApiKey = localStorage.getItem('openai_api_key');
+    // const savedEndpoint = localStorage.getItem('openai_api_endpoint');
     if (savedApiKey) {
         elements.apiKeyInput.value = savedApiKey;
     }
+    // if (savedEndpoint) {
+    //     elements.apiEndpointInput.value = savedEndpoint;
+    // }
 });
 
 // Main functions
 async function startDebate() {
     const apiKey = elements.apiKeyInput.value.trim();
+    const apiEndpoint = elements.apiEndpointInput.value.trim();
     const model = elements.modelSelect.value;
     const question = elements.questionInput.value.trim();
 
@@ -169,12 +175,14 @@ async function startDebate() {
         return;
     }
 
-    // Save API key to localStorage
+    // Save API key and endpoint to localStorage
     localStorage.setItem('openai_api_key', apiKey);
+    localStorage.setItem('openai_api_endpoint', apiEndpoint);
 
     // Initialize debate state
     debateState = {
         apiKey,
+        apiEndpoint: apiEndpoint || 'https://api.openai.com/v1',
         model,
         question,
         transcript: [],
@@ -215,6 +223,7 @@ function newDebate() {
     // Reset state
     debateState = {
         apiKey: '',
+        apiEndpoint: 'https://api.openai.com/v1',
         model: 'gpt-5',
         question: '',
         transcript: [],
@@ -233,6 +242,7 @@ function newDebate() {
     // Reset form
     elements.questionInput.value = '';
     elements.modelSelect.value = 'gpt-5';
+    elements.apiEndpointInput.value = '';
     
     // Re-enable continue button
     elements.continueButton.disabled = false;
@@ -295,14 +305,14 @@ Provide only the ${speaker}'s next message.`;
         const contentDiv = messageDiv.querySelector('.message-content');
         elements.transcript.appendChild(messageDiv);
         
-        // Scroll to bottom
-        elements.transcript.scrollTop = elements.transcript.scrollHeight;
+        // Scroll to bottom only if user is already at bottom
+        scrollToBottomIfNeeded();
         
         let fullContent = '';
         
         if (isGpt5Model) {
             // GPT-5 uses the new reasoning API with streaming
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            const response = await fetch(`${debateState.apiEndpoint}/chat/completions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -345,7 +355,7 @@ Provide only the ${speaker}'s next message.`;
                                 const content = parsed.choices[0].delta.content;
                                 fullContent += content;
                                 contentDiv.innerHTML = formatText(fullContent);
-                                elements.transcript.scrollTop = elements.transcript.scrollHeight;
+                                scrollToBottomIfNeeded();
                             }
                         } catch (e) {
                             // Ignore parsing errors for incomplete chunks
@@ -355,7 +365,7 @@ Provide only the ${speaker}'s next message.`;
             }
         } else {
             // Standard Chat Completions API with streaming for other models
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            const response = await fetch(`${debateState.apiEndpoint}/chat/completions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -368,8 +378,6 @@ Provide only the ${speaker}'s next message.`;
                         { role: 'user', content: prompt }
                     ],
                     stream: true,
-                    max_tokens: 300,
-                    temperature: 0.7
                 })
             });
 
@@ -399,7 +407,7 @@ Provide only the ${speaker}'s next message.`;
                                 const content = parsed.choices[0].delta.content;
                                 fullContent += content;
                                 contentDiv.innerHTML = formatText(fullContent);
-                                elements.transcript.scrollTop = elements.transcript.scrollHeight;
+                                scrollToBottomIfNeeded();
                             }
                         } catch (e) {
                             // Ignore parsing errors for incomplete chunks
@@ -438,6 +446,20 @@ function createMessageElement(speaker) {
     return messageDiv;
 }
 
+// Helper function to check if user is at the bottom of the transcript
+function isUserAtBottom() {
+    const transcript = elements.transcript;
+    const threshold = 50; // pixels from bottom to consider "at bottom"
+    return transcript.scrollTop + transcript.clientHeight >= transcript.scrollHeight - threshold;
+}
+
+// Helper function to scroll to bottom only if user is already at bottom
+function scrollToBottomIfNeeded() {
+    if (isUserAtBottom()) {
+        elements.transcript.scrollTop = elements.transcript.scrollHeight;
+    }
+}
+
 function addMessage(speaker, text) {
     const messageDiv = createMessageElement(speaker);
     const contentDiv = messageDiv.querySelector('.message-content');
@@ -445,8 +467,8 @@ function addMessage(speaker, text) {
     
     elements.transcript.appendChild(messageDiv);
     
-    // Scroll to bottom
-    elements.transcript.scrollTop = elements.transcript.scrollHeight;
+    // Scroll to bottom only if user is already at bottom
+    scrollToBottomIfNeeded();
 }
 
 function formatText(text) {
